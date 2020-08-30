@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html {{ skeleton.getHtmlAttributes()|attributes|raw }}>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="icon" href="/assets/img/favicon.png" type="image/png">
+
+        <title>{{ skeleton.getTitle() }}</title>
+
+        {% set metaDescription = skeleton.getDescription() %}
+        {% if metaDescription %}
+        <meta name="description" content="{{ skeleton.getDescription() }}">
+        {% endif %}
+
+        {% set metaKeywords = skeleton.getKeywords() %}
+        {%- if metaKeywords.isEmpty() == false %}
+        <meta name="keywords" content="{{ skeleton.getKeywords()|join(', ') }}">
+        {% endif %}
+
+        <meta property="og:url" content="{{ skeleton.getUrl() }}">
+
+        {% if skeleton.getTitle() %}
+        <meta property="og:title" content="{{ skeleton.getTitle() }}">
+        {% endif %}
+
+        {% if skeleton.getDescription() %}
+        <meta property="og:description" content="{{ skeleton.getDescription() }}">
+        {% endif %}
+
+        {% for image in skeleton.getImages() %}
+        <meta property="og:image" content="{{ image }}">
+        {% endfor %}
+
+        {% for style in skeleton.getStyles() %}
+            <link rel="stylesheet" href="{{ style }}">
+        {% endfor %}
+
+        {% block scriptsSettings %}
+        <script>
+            var _settings = JSON.parse('{{ skeleton.getSettings()|json_encode(constant('JSON_HEX_APOS'))|raw }}') || {},
+                setting = function(path, defaults){
+                    if (_settings[path]){
+                        return _settings[path];
+                    } else {
+                        var chunks = path.split('.'),
+                            current = _settings,
+                            found = true;
+
+                        for (var i = 0; i < chunks.length; i++){
+                            if ( !(chunks[i] in current) ){
+                                found = false;
+                                break;
+                            }
+                            current = current[chunks[i]];
+                        }
+
+                        return found ? current : defaults;
+                    }
+                };
+        </script>
+        {% endblock %}
+
+        {% block scriptsConfigure %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function(){
+               if (typeof jQuery != 'undefined'){
+                   var ajaxSettings = {
+                       headers: {
+                           'X-CSRF-TOKEN': setting('csrfToken'),
+                           'Accept': 'application/json,text/html'
+                       }
+                   };
+                   jQuery.ajaxSetup(ajaxSettings);
+               }
+            });
+        </script>
+        {% endblock %}
+    </head>
+    <body {{ skeleton.bodyAttributes()|attributes|raw }}>
+
+        <!-- header block start -->
+        {% block header %}{% endblock %}
+        <!-- header block end -->
+
+        <!-- appBefore block start -->
+        {% block appBefore %}{% endblock %}
+        <!-- appBefore block end -->
+
+        <!-- app block start -->
+        {% block app %}{% endblock %}
+        <!-- app block end -->
+
+        <!-- appAfter block start -->
+        {% block appAfter %}{% endblock %}
+        <!-- appAfter block end -->
+
+        <!-- footer block start -->
+        {% block footer %}{% endblock %}
+        <!-- footer block end -->
+
+        <!-- counters block start -->
+        {% block counters %}{% endblock %}
+        <!-- counters block end -->
+
+        {% for script in skeleton.getScripts() %}
+        <script src="{{ script }}"></script>
+        {% endfor %}
+    </body>
+</html>

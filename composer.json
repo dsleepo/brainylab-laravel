@@ -1,0 +1,21 @@
+{
+    "name": "sleepo/brainylab-laravel",
+    "authors": [
+        {
+            "name": "Daniel Khokhordin",
+            "email": "dan.sleepo@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support" : "~5.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Brainylab\\Laravel\\PageSkeleton\\": "page-skeleton/src/",
+            "Brainylab\\Laravel\\Support\\": "support/src/",
+            "Brainylab\\Laravel\\ViewComposer\\": "view-composer/src/",
+            "Brainylab\\Laravel\\RobotsTxt\\": "robots-txt/src/"
+        }
+    }
+}
